@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>즐겨찾기 추가</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+<body>
+
+	<div class="container">
+		<h2>즐겨찾기 추가</h2>
+		
+		<label>제목</label>
+		<input type="text" class="form-control" id="nameInput">
+		<label>주소</label>
+		<input type="text" class="form-control" id="urlInput">
+		<button type="button" id="duplicateBtn" class="btn btn-success mt-2">중복확인</button>
+	<div class="d-flex">
+		<div class="text-danger small d-none mt-1" id="duplicateText">중복된 url 입니다.</div>
+	</div>
+		<div class="text-success small d-none mt-1" id="avaliableText">저장 가능한 url 입니다.</div>
+		<button type="button" class="btn btn-success btn-block mt-3" id="addBtn">추가</button>
+	</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+
+<script>
+	$(document).ready(function() {
+		
+		$("#duplicateBtn").on("click", function () {
+			let url = $("#urlInput").val();
+			
+			if (url == "") {
+				alert("주소를 입력하세요.");
+				return;
+			}
+			
+			if(!url.startsWith("http://") && !url.startsWith("https://")) {
+				alert("정상적이지 않은 주소입니다.");
+				return;
+			}
+			
+			$.ajax({
+				type:"post"
+				, url:"/ajax/favorite/duplicate-url"
+				, data:{"url":url}
+				, success:function(response) {
+					if(response.isDuplicate) {
+						// duplicate
+						$("#duplicateText").removeClass("d-none");
+						$("#avaliableText").addClass("d-none");
+					} else {
+						$("#avaliableText").removeClass("d-none");
+						$("#duplicateText").addClass("d-none");
+					}
+				}
+				, error:function() {
+					alert("중복확인! 에러");
+				}
+			});
+			
+		});
+		
+		$("#addBtn").on("click", function() {
+			let name = $("#nameInput").val();
+			let url = $("#urlInput").val();
+			
+			if (name == "") {
+				alert("이름을 입력해주세요.");
+			}
+			
+			if (url == "") {
+				alert("url을 입력해주세요.");
+			}
+			
+			/* if(! (url.startsWith("http://") || url.startsWith("https://"))) {
+				alert("정상적이지 않은 주소입니다.");
+				return;
+			} */
+			if(!url.startsWith("http://") && !url.startsWith("https://")) {
+				alert("정상적이지 않은 주소입니다.");
+				return;
+			}
+			// name과 url을 즐겨찾기에 저장
+			// /ajax/favorite/create url path로 post 메소드를 통해
+			// name 이라는 이름으로 사이트 이름, url이라는 이름으로 주소를 전달하면,
+			// 저장을 해주고, 그 결과를 성공 실패 여부에 따라 아래 json 형태로 보여준다.
+			// 성공 : {"result":"success" 실패 : {"result":"fail"}
+			
+			$.ajax({
+			type:"post"
+			, url:"/ajax/favorite/create"
+			, data:{"name":name, "url":url}
+			, success:function(response) {
+				if (response.result == "success") {
+					// list 페이지로 이동
+					location.href = "/ajax/favorite/list"
+				} else {
+					alert("저장 실패");
+				}
+			}
+			, error:function() {
+				alert("저장 에러!");
+			}
+			});
+		});
+	});
+</script>
+</body>
+</html>
