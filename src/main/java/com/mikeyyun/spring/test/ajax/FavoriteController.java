@@ -18,7 +18,7 @@ import com.mikeyyun.spring.test.ajax.service.FavoriteService;
 
 @RequestMapping("/ajax/favorite")
 @Controller
-public class FavoriteList {
+public class FavoriteController {
 	
 	@Autowired
 	private FavoriteService favoriteService;
@@ -75,6 +75,23 @@ public class FavoriteList {
 //		} else {
 //			resultMap.put("isDuplicate", false);
 //		}
+		return resultMap;
+	}
+	
+	@ResponseBody
+	@GetMapping("/delete")
+	public Map<String, String> deleteFavorite(@RequestParam("id") int id) {
+		
+		int count = favoriteService.deleteFavorite(id);
+		
+		Map<String, String> resultMap = new HashMap<>();
+		// 성공 : {"result":"success"}
+		// 실패 : {"result":"fail"}
+		if(count == 1) {
+			resultMap.put("result", "success");
+		} else {
+			resultMap.put("result", "fail");
+		}
 		return resultMap;
 	}
 	
