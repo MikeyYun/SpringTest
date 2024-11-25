@@ -1,0 +1,49 @@
+@charset "UTF-8";
+#wrap {
+    width:1200px; 
+    margin:auto
+}
+
+/* 이미지 스타일링 */
+#bannerImage {
+    width: 100%; /* 부모 요소의 너비를 가득 채움 */
+    height: auto; /* 이미지 비율 유지 */
+    display: block; /* 아래쪽 여백 제거 */
+}
+
+
+.nav > .nav-item > .nav-link {
+    background-color:threedlightshadow; 
+    color:white; 
+    font-size:17px;
+    font-weight: bold;
+}
+.nav > .nav-item > a:hover {
+    background-color:rgb(238, 156, 75);
+}
+
+.reservation {
+    height:300px; 
+    width:400px; 
+    background-color:black ;
+     color:white;
+}
+
+.reservation-confirm {
+    height:300px;  
+    width:500px; 
+    background-color:black; 
+    color:white;
+}
+.reservation-call {
+    height:300px;  
+    width:300px; 
+    background-color:black; 
+    color:white;
+}
+
+.member-input {width:600px}
+.input-label {width:90px}
+.text-input {width:300px !important;}
+
+address {font-size: 12px; color:gray;}
