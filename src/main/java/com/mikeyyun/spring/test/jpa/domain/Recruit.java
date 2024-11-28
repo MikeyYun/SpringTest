@@ -24,8 +24,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Recruit {
 	
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
 	@Column(name="companyId")
@@ -37,7 +37,7 @@ public class Recruit {
 	private String qualification;
 	private String type;
 	private String region;
-	private String salary;
+	private int salary;
 	
 	@Column(name="createdAt")
 	@CreationTimestamp
